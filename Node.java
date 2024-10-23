@@ -4,27 +4,27 @@
  * @author Java Foundations, mvail
  * @version 4.0
  */
-public class Node<E> {
-	private Node<E> next;
-	private E element;
+public class Node<T> {
+	private Node<T> nextNode;
+	private T element;
 
 	/**
   	 * Creates an empty node.
   	 */
-	public Node() {
-		next = null;
-		element = null;
+	public Node(T element) {
+		nextNode = null;
+		this.element = null;
 	}
 
 	/**
   	 * Creates a node storing the specified element.
  	 *
-  	 * @param elem
+  	 * @param element
   	 *            the element to be stored within the new node
   	 */
-	public Node(E elem) {
-		next = null;
-		element = elem;
+	public Node(T element, Node<T> nextMNode) {
+		this.nextNode = nextMNode;
+		this.element = element;
 	}
 
 	/**
@@ -32,18 +32,18 @@ public class Node<E> {
   	 *
   	 * @return the node that follows the current one
   	 */
-	public Node<E> getNext() {
-		return next;
+	public Node<T> getNextNode() {
+		return nextNode;
 	}
 
 	/**
  	 * Sets the node that follows this one.
  	 *
- 	 * @param node
+ 	 * @param nextNode
  	 *            the node to be set to follow the current one
  	 */
-	public void setNext(Node<E> node) {
-		next = node;
+	public void setNextNode(Node<T> nextNode) {
+		this.nextNode = nextNode;
 	}
 
 	/**
@@ -51,22 +51,22 @@ public class Node<E> {
  	 *
  	 * @return the element stored in this node
  	 */
-	public E getElement() {
+	public T getElement() {
 		return element;
 	}
 
 	/**
  	 * Sets the element stored in this node.
   	 *
-  	 * @param elem
+  	 * @param element
   	 *            the element to be stored in this node
   	 */
-	public void setElement(E elem) {
-		element = elem;
+	public void setElement(T element) {
+		this.element = element;
 	}
 
 	@Override
 	public String toString() {
-		return "Element: " + element.toString() + " Has next: " + (next != null);
+		return "Element: " + element.toString() + " Has next: " + (nextNode != null);
 	}
 }

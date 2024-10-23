@@ -16,7 +16,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 	private int size;
 	private int modCount;
 	
-	/** Creates an empty list */
+	/** Creates a new empty list */
 	public IUSingleLinkedList() {
 		head = tail = null;
 		size = 0;
@@ -80,7 +80,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 				found = true;
 			} else {
 				previous = current;
-				current = current.getNext();
+				current = current.getnext();
 			}
 		}
 		
@@ -91,12 +91,12 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 		if (size() == 1) { //only node
 			head = tail = null;
 		} else if (current == head) { //first node
-			head = current.getNext();
+			head = current.getnext();
 		} else if (current == tail) { //last node
 			tail = previous;
-			tail.setNext(null);
+			tail.setnext(null);
 		} else { //somewhere in the middle
-			previous.setNext(current.getNext());
+			previous.setnext(current.getnext());
 		}
 		
 		size--;
@@ -125,38 +125,65 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 
 	@Override
 	public int indexOf(T element) {
-		// TODO 
-		return 0;
+		Node<T> currentNode = head;
+		int currentIndex = 0;
+		while (currentNode != null && !element.equals(currentNode.getElement())) {
+			currentNode = currentNode.getNextNode();
+			currentIndex++;
+		}
+		if(currentNode == null){// or currentIndex == size, didn't find it
+			currentIndex = -1;
+		}
+		return currentIndex; // method should only have one return statement. Makes it easier to find exit points in method.
 	}
 
 	@Override
 	public T first() {
-		// TODO 
-		return null;
+		if(isEmpty()){
+			throw new NoSuchElementException()
+		}
+		return head.getElement();
 	}
 
 	@Override
 	public T last() {
-		// TODO 
-		return null;
+		if(isEmpty()){
+			throw new NoSuchElementException()
+		}
+		return tail.getElement();
 	}
 
 	@Override
 	public boolean contains(T target) {
-		// TODO 
-		return false;
+		return indexOf(target) > -1;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		// TODO 
-		return false;
+		return head == null; //If head is null the list is gone. Can't possibly be wrong.
 	}
 
 	@Override
 	public int size() {
-		// TODO 
-		return 0;
+		return size;
+	}
+
+	@Override
+	public String toString(){
+		// StringBuilder is an array that elements(strings) are added to
+        // preventing O(n^2) which string concatenation causes by constantly recreating string to add elements
+        // Every toString should look similar to this.
+        StringBuilder str = new StringBuilder();
+        str.append("[");
+        for (T element : this){
+            str.append(element.toString());
+            str.append(", ");
+        }
+        if(size() > 0){
+            str.delete(str.length() - 2, str.length()); // remove trailing ", "
+        }
+        str.append("]");
+        return str.toString();
 	}
 
 	@Override
