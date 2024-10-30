@@ -7,14 +7,7 @@
 public class Node<T> {
 	private Node<T> nextNode;
 	private T element;
-
-	/**
-  	 * Creates an empty node.
-  	 */
-	public Node(T element) {
-		nextNode = null;
-		this.element = null;
-	}
+	private Node<T> previousNode;
 
 	/**
   	 * Creates a node storing the specified element.
@@ -22,9 +15,24 @@ public class Node<T> {
   	 * @param element
   	 *            the element to be stored within the new node
   	 */
-	public Node(T element, Node<T> nextMNode) {
-		this.nextNode = nextMNode;
+	public Node(T element) {
+		this.nextNode = null;
+		previousNode = null;
 		this.element = element;
+
+	}
+		/**
+  	 * Creates a node storing the specified element and known next node.
+ 	 *
+  	 * @param element //the element to be stored within the new node
+	 * @param nextNode // the known next node
+  	 *            
+  	 */
+	public Node(T element, Node<T> nextNode) {
+		this.nextNode = nextNode;
+		previousNode = null;
+		this.element = element;
+
 	}
 
 	/**
