@@ -45,13 +45,29 @@ public class Node<T> {
 	}
 
 	/**
+	 * Returns the node before this one.
+	 * 
+	 * @return the node before this current node.
+	 */
+	public Node<T> getPreviousNode(){
+		return previousNode;
+	}
+
+	/**
  	 * Sets the node that follows this one.
  	 *
- 	 * @param nextNode
- 	 *            the node to be set to follow the current one
+ 	 * @param nextNode the node to be set to follow the current one
+ 	 *
  	 */
 	public void setNextNode(Node<T> nextNode) {
 		this.nextNode = nextNode;
+	}
+
+	/**Set the node before this one.
+	 *@param previousNode
+	 */
+	public void setPreviousNode(Node<T> previousNode){
+		this.previousNode = previousNode;
 	}
 
 	/**
