@@ -133,8 +133,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 		}
 		else{
 			Node<T> currNode = head;
-			//size - 2 because need to account for the size being reduced by 1 when tail is removed
-			for(int i = 0; i < size - 2; i++){
+			for(int i = 1; i < size - 2; i++){
 				currNode = currNode.getNextNode();
 			}
 			last = tail.getElement();
