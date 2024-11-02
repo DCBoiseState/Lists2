@@ -141,8 +141,6 @@ public class ListTester {
 		String STRING_A = "A";
 		Integer[] LIST_B = {ELEMENT_B};
 		String STRING_B = "B";
-		Integer[] LIST_C = {ELEMENT_C};
-		String STRING_C = "C";
 		Integer[] LIST_BA = {ELEMENT_B, ELEMENT_A};
 		String STRING_BA = "BA";
 		Integer[] LIST_AB = {ELEMENT_A, ELEMENT_B};
@@ -262,9 +260,9 @@ public class ListTester {
 		case singleLinkedList:
 			listToUse = new IUSingleLinkedList<Integer>();
 			break;
-		case doubleLinkedList:
-			listToUse = new IUDoubleLinkedList<Integer>();
-			break;
+		// case doubleLinkedList:
+		// 	listToUse = new IUDoubleLinkedList<Integer>();
+		// 	break;
 		default:
 			listToUse = null;
 		}

@@ -72,8 +72,8 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 		if(newNode.getNextNode() == null){
 			tail = newNode;
 		}
-			size++;
-			modCount++;
+		size++;
+		modCount++;
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 			}
 		}
 		else{
-			Node<T> currentNode = head;
+			Node<T> currentNode = head;//Set currentHead to head to start at beginning of list
 			while (currentNode.getNextNode() != null && !currentNode.getNextNode().getElement().equals(element)) {
 				currentNode = currentNode.getNextNode();
 			}
@@ -175,7 +175,6 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 		}
 		size--;
 		modCount++;
-		
 		return retVal;
 	}
 
@@ -204,7 +203,6 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 			size--;
 			modCount++;
 		}
-	
 		return retVal;
 	}
 
