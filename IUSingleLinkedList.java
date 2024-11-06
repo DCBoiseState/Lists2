@@ -9,7 +9,7 @@ import java.util.ConcurrentModificationException;
  * ListIterator is unsupported.
  * 
  * @author 
- * 
+ * Davina Causey
  * @param <T> type to store
  */
 public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {

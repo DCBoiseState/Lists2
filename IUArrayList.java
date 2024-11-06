@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.ConcurrentModificationException;
 /**
  * Array-based implementation of IndexUnsortedList. Supports a basic Iterator.
+ * Average memory use of arraylist is about 1.5n
  * @author Davina Causey
  */
 public class IUArrayList<T> implements IndexedUnsortedList<T> {
