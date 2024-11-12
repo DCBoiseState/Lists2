@@ -195,7 +195,7 @@ public class ListTester {
 		testSingleElementList(AB_removeB_A, "AB_removeB_A", LIST_A, STRING_A);
 		testSingleElementList(AB_remove0_B, "AB_remove0_B", LIST_B, STRING_B);
 		testSingleElementList(AB_remove1_A, "AB_remove1_A", LIST_A, STRING_A);
-		//testSingleElementList(AB_previousAremoveA_B, "AB_previousAremoveA_B", LIST_B, STRING_B);
+		testSingleElementList(AB_listiteratorPreviousARemoveA_B, null, LIST_B, STRING_B);
 		//2-element to 3-element
 		testThreeElementList(AB_addToRearC_ABC,"AB_addToRearC_ABC", LIST_ABC, STRING_ABC);
 		testThreeElementList(AB_addToFrontC_CAB, "AB_addToFrontC_CAB", LIST_CAB, STRING_CAB);
@@ -486,14 +486,13 @@ public class ListTester {
 	 * @return [B] after listiterator removes A
 	 */
 	private IndexedUnsortedList<Integer> AB_listiteratorPreviousARemoveA_B(){
-		IndexedUnsortedList<Integer> list = newList();
-		list.add(ELEMENT_A);
-		list.add(ELEMENT_B);
+		IndexedUnsortedList<Integer> list = A_addToRearB_AB();
 		ListIterator<Integer> lit = list.listIterator(1);
 		lit.previous();
 		lit.remove();
 		return list;
 	}
+	private Scenario<Integer> AB_listiteratorPreviousARemoveA_B = () -> AB_listiteratorPreviousARemoveA_B();
 	
 
 
