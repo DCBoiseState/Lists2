@@ -85,6 +85,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			throw new IndexOutOfBoundsException();
 		}
         Node<T> newNode = new Node<T> (element);
+        //index = 0 will be at the head of the list or if empty the head AND tail 
         if(index == 0){
 			if(isEmpty()){
                 head = tail = newNode;
@@ -94,23 +95,31 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
                 head = newNode;
             }
 		}
+        //index = size will place element at end of the list, becoming the tail
 		else if(index == size){
             newNode.setPreviousNode(tail);
             tail.setNextNode(newNode);
             tail = newNode;
         }else{
             Node<T> targetNode = head;
+            //Index in middle of list requires loop to find index
+            // (index - 1) index = 5 targetNode becomes node just infront of index 5
+            //[A, B, C, D, (E), F]
             for (int i = 0; i < index - 1; i++) {
                 targetNode = targetNode.getNextNode();
             }
-            Node<T> tmpNext = targetNode.getNextNode();
-        	targetNode.setNextNode(newNode);
+            //[A<-->B<-->C<-->D<-->(E)<-->F] targetNode.getNextNode selects F and sets newNode's next node to F
+            //[A<-->B<-->C<-->D<-->E-- G-->>F] E and G's nextNode = F
+            newNode.setNextNode(targetNode.getNextNode());
+            //[A<-->B<-->C<-->D<-->E-- G-->>F]
             newNode.setPreviousNode(targetNode);
-            newNode.setNextNode(tmpNext);
-            tmpNext.setPreviousNode(newNode);
+            targetNode.getNextNode().setPreviousNode(newNode);
+            targetNode.setNextNode(newNode);
+            
+             
         }
         size++;
-		modCount++;
+        modCount++;
 	
     }
 
