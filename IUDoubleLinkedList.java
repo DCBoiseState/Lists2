@@ -39,7 +39,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
     public void addToRear(T element) {
         Node<T> newNode = new Node<T>(element);
         if(isEmpty()){
-            newNode = tail=head;
+            head = tail = newNode;
         }
         else{
             Node<T> targetNode = tail;
@@ -84,30 +84,33 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
         if(index < 0 || index > size){
 			throw new IndexOutOfBoundsException();
 		}
+        Node<T> newNode = new Node<T> (element);
         if(index == 0){
-			addToFront(element);
+			if(isEmpty()){
+                head = tail = newNode;
+            }else{
+                newNode.setNextNode(head);
+                head.setPreviousNode(newNode);
+                head = newNode;
+            }
 		}
-		else{
-            Node<T> newNode = new Node<T> (element);
+		else if(index == size){
+            newNode.setPreviousNode(tail);
+            tail.setNextNode(newNode);
+            tail = newNode;
+        }else{
             Node<T> targetNode = head;
-            for (int i = 0; i < index; i++) {
+            for (int i = 0; i < index - 1; i++) {
                 targetNode = targetNode.getNextNode();
             }
             Node<T> tmpNext = targetNode.getNextNode();
-            if(tmpNext != null){
-                newNode.setNextNode(tmpNext);
-                tmpNext.setPreviousNode(newNode);
-            }else{
-                newNode.setNextNode(null);
-                tail = newNode;
-            }
-            
-            
-			targetNode.setNextNode(newNode);
+        	targetNode.setNextNode(newNode);
             newNode.setPreviousNode(targetNode);
-			size++;
-			modCount++;
+            newNode.setNextNode(tmpNext);
+            tmpNext.setPreviousNode(newNode);
         }
+        size++;
+		modCount++;
 	
     }
 
@@ -174,11 +177,12 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
         }
         else{
             while(targetNode != null && !targetNode.getElement().equals(element)){
-                targetNode = targetNode.getNextNode();
                 if(targetNode.equals(tail)){
                     throw new NoSuchElementException();
                 }
-                
+                else{
+                    targetNode = targetNode.getNextNode();
+                }   
             }
             tempNext = targetNode.getNextNode();
             tempPrev = targetNode.getPreviousNode();
@@ -224,10 +228,14 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 			throw new IndexOutOfBoundsException();
 		}
 		Node<T> currentNode = head;
-		for (int i = 0; i < index; i++) {
-			currentNode = currentNode.getNextNode();
-		}
-		currentNode.setElement(element);
+        if(index == 0){
+            currentNode.setElement(element);
+        }else{
+            for (int i = 0; i < index; i++) {
+                currentNode = currentNode.getNextNode();
+            }
+            currentNode.setElement(element);
+        }
 		modCount++;
     }
 
@@ -355,11 +363,14 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
         }
         @Override
         public T next() {
+            if(iterModCount != modCount){
+				throw new ConcurrentModificationException();
+			}
             if(!hasNext()){
 				throw new NoSuchElementException();
 			}
             T retVal = nextNode.getElement();
-            lastReturnedNode = nextNode.getNextNode();
+            lastReturnedNode = nextNode;
 			nextNode = nextNode.getNextNode();
 			nextIndex++;
 			return retVal;
@@ -375,17 +386,34 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
 
         @Override
         public T previous() {
+            if(iterModCount != modCount){
+				throw new ConcurrentModificationException();
+			}
             if(!hasPrevious()){
                 throw new NoSuchElementException();
             }
-            throw new UnsupportedOperationException("Unimplemented method 'set'");
+            if(nextNode == null){
+                nextNode = tail;
+            }else{
+                nextNode = nextNode.getPreviousNode();
+            }
+            lastReturnedNode = nextNode;
+            nextIndex--;
+            return nextNode.getElement();
+            
         }
         @Override
         public int nextIndex() {
+            if(iterModCount != modCount){
+				throw new ConcurrentModificationException();
+			}
             return nextIndex;
         }
         @Override
         public int previousIndex() {
+            if(iterModCount != modCount){
+				throw new ConcurrentModificationException();
+			}
             return nextIndex - 1;
         }
         @Override
@@ -397,12 +425,12 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
                 throw new IllegalStateException();
             }
             if(lastReturnedNode != head){
-                lastReturnedNode.getPreviousNode().setNextNode(lastReturnedNode.getNextNode());//Setting A to C
+                lastReturnedNode.getPreviousNode().setNextNode(lastReturnedNode.getNextNode());//connecting A to C
             }else{
                 head = head.getNextNode();
             }
             if(lastReturnedNode != tail){
-                lastReturnedNode.getNextNode().setPreviousNode(lastReturnedNode.getPreviousNode());// Setting C to A
+                lastReturnedNode.getNextNode().setPreviousNode(lastReturnedNode.getPreviousNode());//connecting C to A
             }else{
                 tail = tail.getPreviousNode();
             }
@@ -418,13 +446,41 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {
         }
         @Override
         public void set(T e) {//rules for set similar to remove (lastReturnedNode will be affected) can be called multiple times in a row
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'set'");
+            if(iterModCount != modCount){
+				throw new ConcurrentModificationException();
+			}
+            if(lastReturnedNode == null){
+                throw new IllegalStateException();
+            }
+            lastReturnedNode.setElement(e);
+            modCount++;
+            iterModCount++;
         }
         @Override
         public void add(T e) {//result in lastReturnedNode will be affected
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'add'");
+            if(iterModCount != modCount){
+				throw new ConcurrentModificationException();
+			}
+            Node<T> newNode = new Node<T>(e);
+            if(isEmpty()){
+                newNode = head = tail;
+            }
+            else if(nextNode == null){
+                addToRear(e);
+            }
+            else if(nextNode == head){
+                addToFront(e);
+            }
+            else{
+                newNode.setPreviousNode(nextNode.getPreviousNode());
+                nextNode.getPreviousNode().setNextNode(newNode);
+                newNode.setNextNode(nextNode);
+                nextNode.setPreviousNode(newNode);
+                size++;
+                modCount++;
+            }
+            lastReturnedNode = newNode;
+            
         }
     }
 
