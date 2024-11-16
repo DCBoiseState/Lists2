@@ -4,27 +4,34 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.ConcurrentModificationException;
 /**
- * Array-based implementation of IndexUnsortedList. Supports a basic Iterator.
- * Average memory use of arraylist is about 1.5n
+ * Array-based implementation of the {@code IndexedUnsortedList} interface.
+ * Provides efficient access and modification of elements using an underlying array structure.
+ * Includes basic iterator support for traversing and modifying the list.
+ * Average memory usage for this array-based list is approximately 1.5n.
+ * 
+ * @param <T> the type of elements stored in the list
  * @author Davina Causey
  */
-public class IUArrayList<T> implements IndexedUnsortedList<T> {
+public class IUArrayList<T> implements IndexedUnsortedList<T> {//Average memory use of arraylist is about 1.5n
     public static final int DEFAULT_CAPACITY = 10;
     private T[] array;
     private int rear;
     private int changeCount;
 
     /**
-     * Default constructor. Initialize a new empty list.
+     * Constructs a new, empty {@code IUArrayList} with the default initial capacity.
+     * Initializes the internal array to the default size and prepares the list for use.
      */
-    @SuppressWarnings("unchecked")
     public IUArrayList(){
         this(DEFAULT_CAPACITY);// Calls other constructor and passes default capacity into more detailed constructor.
     }
 
     /**
-     * Constructor initializes a new empty list with given initial capacity.
-     * @param initialCapacity
+     * Constructs a new, empty {@code IUArrayList} with the specified initial capacity.
+     * Initializes the internal array to the given size.
+     *
+     * @param initialCapacity the initial capacity of the array
+     * @throws IllegalArgumentException if the initial capacity is negative
      */
     @SuppressWarnings("unchecked")
     public IUArrayList(int initialCapacity){
@@ -34,8 +41,9 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
     }
 
     /**
-     * Double array size to increase capacity if needed.
-    */
+     * Doubles the size of the internal array when the current capacity is reached.
+     * Ensures that additional space is available to accommodate more elements.
+     */
     private void expandIfNecessary(){
         if(array.length == rear){// If array length equals rear there is no more room in array.
             array = Arrays.copyOf(array, array.length * 2);// Use the array class to copy and overwrite the list while doubling the size.
@@ -271,7 +279,8 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
         throw new UnsupportedOperationException("Unimplemented method 'listIterator'");
     }
     /**
-     * Basic iterator for IUArrayList includes remove()
+     * An iterator implementation for the {@code IUArrayList}.
+     * Supports list navigation and element removal during iteration.
      */
     private class ALIterator implements Iterator<T>{
         private int nextIndex;
@@ -279,7 +288,9 @@ public class IUArrayList<T> implements IndexedUnsortedList<T> {
         private int expectedChangeCount;
 
         /**
-         * Initializes this Iterator in front of first element.
+         * Constructs a new iterator for the {@code IUArrayList}.
+         * Initializes the iterator to start before the first element in the array list and sets
+         * the expected change count for fail-fast behavior.
          */
         public ALIterator(){
             nextIndex = 0;

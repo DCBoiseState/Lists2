@@ -4,20 +4,23 @@ import java.util.NoSuchElementException;
 import java.util.ConcurrentModificationException;
 
 /**
- * Single-linked node implementation of IndexedUnsortedList.
- * An Iterator with working remove() method is implemented, but
- * ListIterator is unsupported.
+ * A single-linked node implementation of the {@code IndexedUnsortedList} interface.
+ * This implementation includes an {@code Iterator} with a functional {@code remove()} method
+ * that allows modification of the list during iteration. Note that {@code ListIterator} is 
+ * not supported in this implementation.
  * 
- * @author 
- * Davina Causey
- * @param <T> type to store
+ * @author Davina Causey
+ * @param <T> the type of elements stored in the list
  */
 public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 	private Node<T> head, tail;// Technically only needs to keep track of head but keeping track of tail makes addToRear simple.
 	private int size;// Makes size() simple.
 	private int modCount;
 	
-	/** Creates a new empty list */
+	/**
+	 * Creates a new, empty instance of the {@code IUSingleLinkedList}.
+	 * Initializes the head and tail to null, sets the initial size and modification count to zero.
+	 */
 	public IUSingleLinkedList() {
 		head = tail = null;
 		size = 0;
@@ -319,15 +322,22 @@ public class IUSingleLinkedList<T> implements IndexedUnsortedList<T> {
 		throw new UnsupportedOperationException();
 	}
 
-	/** Iterator for IUSingleLinkedList */
-	//<T> has already been defined above. If it was included "SLLIterator<T>" the iterator would have a duplicate list. 
+	/**
+	 * An iterator implementation for the {@code IUSingleLinkedList}.
+	 * This iterator allows list navigation and supports element removal during iteration.
+	 */
+	//<T> has already been defined above. If it was included "SLLIterator<T>" the iterator would have a duplicate list.
 	//"Shadow generic"
 	private class SLLIterator implements Iterator<T> {
 		private Node<T> nextNode;
 		private boolean canRemove;
 		private int iterModCount;
 		
-		/** Creates a new iterator for the list */
+		/**
+		 * Constructs a new iterator for the {@code IUSingleLinkedList}.
+		 * Initializes the iterator at that beginning of the list and tracks modification count to maintain
+		 * concurrency.
+		 */
 		public SLLIterator() {
 			nextNode = head;
 			canRemove = false;
