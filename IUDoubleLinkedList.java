@@ -312,7 +312,7 @@ public class IUDoubleLinkedList<T> implements IndexedUnsortedList<T> {//Memory u
 	 */
     private class DLLIterator implements ListIterator<T>{
         private Node<T> nextNode;
-        private Node<T> lastReturnedNode;//
+        private Node<T> lastReturnedNode;
 		private int iterModCount;
         private int nextIndex;
 
